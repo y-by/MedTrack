@@ -1,0 +1,118 @@
+.settings-section {
+  margin-bottom: var(--space-6);
+}
+
+.settings-section h2 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+}
+
+.settings-section__hint {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.settings-account {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.settings-account__name {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+.settings-account__email {
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-2);
+}
+
+.settings-roles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  cursor: pointer;
+}
+
+.settings-toggle__title {
+  display: block;
+  font-weight: var(--weight-semibold);
+}
+
+.settings-toggle__description {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.settings-toggle input {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.settings-inline-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.settings-invite-result {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-3);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-strong);
+  border-radius: var(--radius-md);
+  font-weight: var(--weight-semibold);
+}
+
+.settings-link-list {
+  margin-bottom: var(--space-3);
+}
+
+.settings-link-list h3 {
+  font-size: var(--text-base);
+  margin: 0 0 var(--space-2);
+}
+
+.settings-link-list ul {
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.settings-link-list__ul--removable {
+  list-style: none;
+  padding-left: 0;
+}
+
+.settings-link-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}
+
+.settings-link-list__item:not(:last-child) {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-link-list__confirm {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

@@ -1,0 +1,54 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.badge--neutral {
+  background: var(--color-status-upcoming-bg);
+  color: var(--color-status-upcoming);
+}
+
+.badge--due {
+  background: var(--color-status-due-bg);
+  color: var(--color-status-due);
+}
+
+.badge--overdue {
+  background: var(--color-status-overdue-bg);
+  color: var(--color-status-overdue);
+}
+
+.badge--taken {
+  background: var(--color-status-taken-bg);
+  color: var(--color-status-taken);
+}
+
+/* Interactive badges (e.g. undo-taken) stay visually compact but keep an
+   AAA-sized (48px) tap target via an invisible hit area. */
+.badge--interactive {
+  border: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.badge--interactive::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max(100%, var(--tap-target-min));
+  height: max(100%, var(--tap-target-min));
+}
+
+.badge--interactive:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}

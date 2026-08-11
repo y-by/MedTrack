@@ -1,0 +1,141 @@
+/*
+  Design tokens — the only place raw color/size values should live.
+  Components reference these variables, never hardcoded values, so a
+  future visual refresh is a token edit, not a component rewrite.
+
+  Palette chosen for WCAG 2.2 AAA contrast (7:1 body text, 4.5:1 large
+  text/UI) against its paired surface. Re-verify with a contrast checker
+  if these are adjusted during the design pass.
+*/
+
+:root {
+  color-scheme: light;
+
+  /* ---- Color: surfaces ---- */
+  --color-bg: #F7F5F0;
+  --color-surface: #FFFFFF;
+  --color-surface-sunken: #EFECE4;
+  --color-border: #D8D3C7;
+  --color-border-strong: #A9A392;
+
+  /* ---- Color: text ---- */
+  --color-text: #1A1917;          /* ~18:1 on --color-bg */
+  --color-text-muted: #4A4842;     /* ~8.6:1 on --color-bg */
+  --color-text-on-primary: #FFFFFF;
+
+  /* ---- Color: brand ---- */
+  --color-primary: #1B4B43;        /* deep forest teal, ~8.9:1 on white */
+  --color-primary-strong: #0F332D;
+  --color-primary-soft: #E3EDE9;
+
+  /* ---- Color: status (always paired with icon + text label, never color alone) ---- */
+  --color-status-upcoming: #43433F;
+  --color-status-upcoming-bg: #EBEAE4;
+  --color-status-due: #7A4A00;
+  --color-status-due-bg: #FBEEDC;
+  --color-status-overdue: #8C1D1D;
+  --color-status-overdue-bg: #FAE6E6;
+  --color-status-taken: #14532D;
+  --color-status-taken-bg: #E2F0E5;
+
+  /* ---- Color: feedback ---- */
+  --color-danger: #8C1D1D;
+  --color-danger-bg: #FAE6E6;
+  --color-focus-ring: #0B5FFF;
+
+  /* ---- Type ---- */
+  --font-body: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: var(--font-body);
+
+  --text-xs: 0.8125rem;   /* 13px */
+  --text-sm: 0.9375rem;   /* 15px */
+  --text-base: 1.0625rem; /* 17px — MVP baseline is a notch above typical 16px for legibility */
+  --text-lg: 1.25rem;     /* 20px */
+  --text-xl: 1.5rem;      /* 24px */
+  --text-2xl: 1.875rem;   /* 30px */
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- Space (4px base scale) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* ---- Radius ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+
+  /* ---- Elevation (kept subtle — this app should feel calm, not flashy) ---- */
+  --shadow-sm: 0 1px 2px rgba(26, 25, 23, 0.06);
+  --shadow-md: 0 4px 12px rgba(26, 25, 23, 0.08);
+
+  /* ---- Motion ---- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---- Touch targets (AAA target size) ---- */
+  --tap-target-min: 48px;
+}
+
+/*
+  Dark theme. Applied via a `data-theme="dark"` attribute on <html>, set
+  by ThemeContext (src/context/ThemeContext.jsx) — either because the
+  user chose "Dark" in Settings, or chose "System" and the OS prefers
+  dark. Same AAA-contrast intent as the light palette; re-verify with a
+  contrast checker if these are adjusted during the design pass.
+*/
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* ---- Color: surfaces ---- */
+  --color-bg: #101512;
+  --color-surface: #182420;
+  --color-surface-sunken: #0c100e;
+  --color-border: #2b3833;
+  --color-border-strong: #4a5850;
+
+  /* ---- Color: text ---- */
+  --color-text: #f2f1ec;
+  --color-text-muted: #b9b7ae;
+  --color-text-on-primary: #06120e;
+
+  /* ---- Color: brand ---- */
+  --color-primary: #55c7aa;
+  --color-primary-strong: #7bdabf;
+  --color-primary-soft: #16302a;
+
+  /* ---- Color: status ---- */
+  --color-status-upcoming: #d8d6cc;
+  --color-status-upcoming-bg: #262b28;
+  --color-status-due: #ffc876;
+  --color-status-due-bg: #3a2a0e;
+  --color-status-overdue: #ff9b9b;
+  --color-status-overdue-bg: #3a1414;
+  --color-status-taken: #8fe3b0;
+  --color-status-taken-bg: #123322;
+
+  /* ---- Color: feedback ---- */
+  --color-danger: #ff9b9b;
+  --color-danger-bg: #3a1414;
+  --color-focus-ring: #7fcbff;
+
+  /* ---- Elevation (black shadows read as invisible on a dark surface,
+     so these lean darker/stronger than the light-mode values) ---- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+}

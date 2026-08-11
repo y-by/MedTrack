@@ -1,0 +1,17 @@
+.med-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-4);
+}
+
+.med-form__actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.med-form__delete {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}

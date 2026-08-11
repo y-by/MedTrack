@@ -1,0 +1,12 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[[redirects]]
+  # SPA fallback so client-side routing (react-router) survives refreshes and
+  # deep links. Netlify routes /.netlify/functions/* internally before this
+  # rule applies, so it won't intercept API calls.
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,0 +1,40 @@
+.schedule-fields {
+  margin-bottom: var(--space-2);
+}
+
+.schedule-fields__group {
+  margin-bottom: var(--space-4);
+}
+
+.schedule-fields__group > .field__label {
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.schedule-fields__time-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.schedule-fields__time-row .field__input {
+  flex: 1;
+}
+
+.schedule-fields__row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.schedule-fields__row > .field {
+  flex: 1;
+}
+
+@media (max-width: 380px) {
+  .schedule-fields__row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
