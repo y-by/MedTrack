@@ -13,8 +13,9 @@ this is pushed to GitHub. Right now:
 - **Auth** (`src/context/AuthContext.jsx`) — any sign-in method logs you in
   instantly as a seed patient account. No real credentials are checked.
 - **Data** (`src/lib/api.js` + `src/lib/mockData.js`) — an in-memory store
-  seeded with one patient (Yanay), one caretaker (Noa), and a few sample
-  medications. Resets on every page reload.
+  seeded with one patient (Yanay) and one caretaker (Noa), both starting
+  with no medications or links so the first run shows the real empty
+  states. Resets on every page reload.
 
 Everything above those two files — components, pages, hooks, routing — is
 written against the real target shapes, so this isn't throwaway scaffolding.
@@ -27,9 +28,9 @@ npm run dev
 ```
 
 Open the printed local URL. Sign in with either button on the auth screen —
-you'll land as **Yanay**, a patient with three sample medications (one
-overdue, one due soon, one upcoming) to exercise all the card states. Use
-**Add medication** on the dashboard to add more.
+you'll land as **Yanay**, a patient with no medications yet. Use **Add
+medication** on the dashboard to add some and exercise the card states
+(upcoming/due/overdue/taken).
 
 To see the caretaker view: go to **Settings → Roles** and turn on "Care for
 someone else," or edit `src/lib/mockData.js` to seed a caretaker session.
