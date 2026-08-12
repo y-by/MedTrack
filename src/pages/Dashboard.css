@@ -15,10 +15,18 @@
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: var(--space-4);
   align-items: start;
-  /* Caps at 3 columns' worth of width, so very wide screens gain wider
-     cards rather than a 4th+ column, and a lone card doesn't stretch
-     edge-to-edge. auto-fit fills 2 or 3 columns as space allows. */
-  max-width: 1320px;
+}
+
+/* Below this, auto-fit already produces 1-3 columns that stretch to
+   fill the available width with no cap needed. Past ~1488px a 4th
+   auto-fit column would fit (4 * 320px min + 3 * gap <= available
+   width), so lock to exactly 3 columns instead — still stretched to
+   fill the row, so very wide screens get wider cards, not a 4th+
+   column or dead space on the side. */
+@media (min-width: 1488px) {
+  .card-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .caretaker-groups {
