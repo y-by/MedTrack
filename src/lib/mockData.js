@@ -18,9 +18,6 @@ export const delay = (ms = DELAY_MS) => new Promise((resolve) => setTimeout(reso
 let idCounter = 1000
 export const nextId = (prefix) => `${prefix}_${idCounter++}`
 
-const now = () => new Date()
-export const hoursFromNow = (h) => new Date(Date.now() + h * 60 * 60 * 1000).toISOString()
-
 // ---- Seed users ----
 export const users = [
   {

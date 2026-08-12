@@ -8,7 +8,8 @@
  * function signatures and return shapes stay the same so the hooks and
  * components above don't need to change at all.
  */
-import { delay, nextId, hoursFromNow, users, links, medications, doseLogs, invites } from './mockData'
+import { delay, nextId, users, links, medications, doseLogs, invites } from './mockData'
+import { computeNextDose } from './scheduleUtils'
 
 // ---- Medications ----
 
@@ -60,8 +61,7 @@ export async function createMedication({
   const dose = {
     id: nextId('dose'),
     medicationId: medication.id,
-    scheduledFor: hoursFromNow(1),
-    status: 'upcoming',
+    ...computeNextDose(medication),
     takenAt: null,
   }
   doseLogs.push(dose)
@@ -69,11 +69,23 @@ export async function createMedication({
   return { medication, dose }
 }
 
-/** Updates an existing medication's editable fields in place. Returns the updated medication. */
+/**
+ * Updates an existing medication's editable fields in place, and
+ * recomputes its dose's scheduledFor/status to match the (possibly new)
+ * schedule — unless the dose is already marked taken, which an edit
+ * shouldn't silently undo. Returns the updated medication.
+ */
 export async function updateMedication(medicationId, updates) {
   await delay(150)
   const medication = medications.find((m) => m.id === medicationId)
-  if (medication) Object.assign(medication, updates)
+  if (medication) {
+    Object.assign(medication, updates)
+
+    const dose = doseLogs.find((d) => d.medicationId === medicationId)
+    if (dose && dose.status !== 'taken') {
+      Object.assign(dose, computeNextDose(medication))
+    }
+  }
   return medication
 }
 
