@@ -104,3 +104,16 @@ a {
     padding-top: var(--space-6);
   }
 }
+
+/* Desktop: use the full viewport width with a flat 80px gutter, instead
+   of capping at 640px and centering. Pages that want their own narrower
+   column (e.g. Auth's login card) set their own max-width, which wins
+   over this since it's a plain, unscoped class rule; app-shell's own
+   `margin: 0 auto` above still centers that narrower column. */
+@media (min-width: 1024px) {
+  .app-shell {
+    max-width: none;
+    padding-left: 80px;
+    padding-right: 80px;
+  }
+}

@@ -8,6 +8,15 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+/* Keep the header's edges aligned with .app-shell's at desktop width. */
+@media (min-width: 1024px) {
+  .app-header__bar {
+    max-width: none;
+    padding-left: 80px;
+    padding-right: 80px;
+  }
+}
+
 .app-header__brand {
   display: flex;
   align-items: center;

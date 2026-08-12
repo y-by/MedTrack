@@ -1,4 +1,7 @@
-.auth-page {
+/* Compound selector so this reliably beats .app-shell's own max-width
+   rules (including its desktop override) regardless of CSS source
+   order, instead of relying on both having equal specificity. */
+.app-shell.auth-page {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
@@ -51,4 +54,13 @@
   font-size: var(--text-sm);
   color: var(--color-text-muted);
   margin-top: var(--space-5);
+}
+
+/* The auth card is already narrow and auto-centered — it doesn't need
+   .app-shell's desktop 80px gutter, which would just squeeze it further. */
+@media (min-width: 1024px) {
+  .app-shell.auth-page {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
 }
