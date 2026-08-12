@@ -11,9 +11,14 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: var(--space-4);
+  align-items: start;
+  /* Caps at 3 columns' worth of width, so very wide screens gain wider
+     cards rather than a 4th+ column, and a lone card doesn't stretch
+     edge-to-edge. auto-fit fills 2 or 3 columns as space allows. */
+  max-width: 1320px;
 }
 
 .caretaker-groups {

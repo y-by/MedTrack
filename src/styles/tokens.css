@@ -47,12 +47,18 @@
   --font-body: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-display: var(--font-body);
 
-  --text-xs: 0.8125rem;   /* 13px */
-  --text-sm: 0.9375rem;   /* 15px */
-  --text-base: 1.0625rem; /* 17px — MVP baseline is a notch above typical 16px for legibility */
-  --text-lg: 1.25rem;     /* 20px */
-  --text-xl: 1.5rem;      /* 24px */
-  --text-2xl: 1.875rem;   /* 30px */
+  /* 16px is the floor for every size in this scale — nothing renders
+     smaller, per the accessibility requirement. xs and sm sit together
+     at that floor (labels/hints are differentiated from body text by
+     weight, letter-spacing and color, not by shrinking further), then
+     the scale steps out with increasing gaps toward the headings so
+     hierarchy stays clear at the sizes that carry it. */
+  --text-xs: 1rem;      /* 16px */
+  --text-sm: 1rem;      /* 16px */
+  --text-base: 1.125rem; /* 18px */
+  --text-lg: 1.375rem;   /* 22px */
+  --text-xl: 1.75rem;    /* 28px */
+  --text-2xl: 2.25rem;   /* 36px */
 
   --leading-tight: 1.25;
   --leading-normal: 1.5;
