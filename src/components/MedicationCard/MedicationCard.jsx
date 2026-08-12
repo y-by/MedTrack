@@ -2,6 +2,7 @@ import Card from '../ui/Card'
 import Button from '../ui/Button'
 import Icon from '../ui/Icon'
 import DoseStatusBadge from './DoseStatusBadge'
+import { formatTimeOfDay } from '../../lib/scheduleUtils'
 import './MedicationCard.css'
 
 const TYPE_LABEL = {
@@ -13,7 +14,7 @@ const TYPE_LABEL = {
 
 function formatTime(iso) {
   if (!iso) return null
-  return new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
+  return formatTimeOfDay(new Date(iso))
 }
 
 /**

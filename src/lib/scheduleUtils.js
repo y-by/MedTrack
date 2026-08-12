@@ -4,12 +4,19 @@
  * fields client-side (see db/schema.sql).
  */
 
+/** Always 24-hour "HH:mm", regardless of locale — avoids AM/PM ambiguity. */
+export function formatTimeOfDay(date) {
+  const h = String(date.getHours()).padStart(2, '0')
+  const m = String(date.getMinutes()).padStart(2, '0')
+  return `${h}:${m}`
+}
+
 function formatTimeLabel(hhmm) {
   if (!hhmm) return ''
   const [h, m] = hhmm.split(':').map(Number)
   const d = new Date()
   d.setHours(h, m, 0, 0)
-  return d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
+  return formatTimeOfDay(d)
 }
 
 export function formatScheduleLabel({

@@ -7,7 +7,7 @@
 .med-card__top {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
+  flex-wrap: wrap-reverse;
   gap: var(--space-3);
 }
 
@@ -25,7 +25,9 @@
 }
 
 .med-card__name {
-  font-size: var(--text-xl);
+  /* Shrinks gradually on narrow viewports so the header prefers staying on
+     one row over wrapping; floors well above body text for legibility. */
+  font-size: clamp(1.125rem, 4vw, var(--text-xl));
   margin: 0;
   word-break: break-word;
 }
@@ -41,6 +43,9 @@
   align-items: center;
   gap: var(--space-2);
   flex-shrink: 0;
+  /* Auto margin keeps this right-aligned whether it's sharing the row with
+     .med-card__identity or has wrapped onto its own row above it. */
+  margin-left: auto;
 }
 
 .med-card__details {
@@ -83,17 +88,5 @@
 @media (max-width: 380px) {
   .med-card__details {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .med-card__top {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .med-card__top-actions {
-    order: -1;
-    justify-content: flex-end;
   }
 }
