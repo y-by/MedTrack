@@ -71,7 +71,7 @@ export default function PatientDashboardView({ patientId }) {
 
       {hasMedications ? (
         <ul className="card-list" aria-label="Your medications">
-          {data.map(({ medication, dose }) => (
+          {data.map(({ medication, dose, lastTaken, yesterday }) => (
             <li key={medication.id}>
               {editingMedicationId === medication.id ? (
                 <MedicationForm
@@ -86,10 +86,12 @@ export default function PatientDashboardView({ patientId }) {
                 <MedicationCard
                   medication={medication}
                   dose={dose}
+                  lastTaken={lastTaken}
+                  yesterday={yesterday}
                   onMarkTaken={(medId) => dose && markTaken.mutate(dose.id)}
                   isMarking={markTaken.isPending && markTaken.variables === dose?.id}
-                  onUndoTaken={(medId) => dose && markNotTaken.mutate(dose.id)}
-                  isUndoing={markNotTaken.isPending && markNotTaken.variables === dose?.id}
+                  onUndoLastTaken={(doseId) => markNotTaken.mutate(doseId)}
+                  isUndoingLastTaken={markNotTaken.isPending && markNotTaken.variables === lastTaken?.id}
                   onEdit={(medId) => setEditingMedicationId(medId)}
                 />
               )}

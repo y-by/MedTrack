@@ -8,36 +8,11 @@ const STATUS_CONFIG = {
   taken: { tone: 'taken', icon: 'checkCircle', label: 'Taken' },
 }
 
-/**
- * @param {string} status
- * @param {() => void} [onUndoTaken] - when provided and status is 'taken',
- *   the badge becomes a button that reverts the dose to not-taken.
- * @param {boolean} [isUndoing]
- */
-export default function DoseStatusBadge({ status, onUndoTaken, isUndoing = false }) {
+/** @param {string} status */
+export default function DoseStatusBadge({ status }) {
   const config = STATUS_CONFIG[status] || STATUS_CONFIG.upcoming
-  const icon = <Icon name={config.icon} size={16} />
-
-  if (status === 'taken' && onUndoTaken) {
-    return (
-      <Badge
-        as="button"
-        type="button"
-        tone={config.tone}
-        icon={icon}
-        className="badge--interactive"
-        onClick={onUndoTaken}
-        disabled={isUndoing}
-        aria-pressed="true"
-        aria-label="Taken — mark as not taken"
-      >
-        {config.label}
-      </Badge>
-    )
-  }
-
   return (
-    <Badge tone={config.tone} icon={icon}>
+    <Badge tone={config.tone} icon={<Icon name={config.icon} size={16} />}>
       {config.label}
     </Badge>
   )

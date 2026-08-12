@@ -47,7 +47,10 @@ export const links = []
 // "Add medication" flow, rather than pre-populated sample cards.
 export const medications = []
 
-// ---- Seed dose logs (one "next relevant dose" per medication for MVP) ----
+// ---- Seed dose logs ----
+// Each medication has one "current" row (status !== 'taken', the next
+// actionable occurrence) plus any number of historical 'taken' rows —
+// see src/lib/api.js and src/lib/doseHistory.js.
 export const doseLogs = []
 
 // ---- Pending invites (for onboarding link flow) ----

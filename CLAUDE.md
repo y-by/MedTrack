@@ -56,7 +56,13 @@ npm run preview   # serve the production build locally
 
 ## Deferred to later phases
 
-Push notifications/reminders, adherence history, caretaker missed-dose
-alerts, refill tracking, multi-language support, offline write queueing.
-The data model (`dose_logs.status`) already anticipates most of these —
-don't redesign it to add them, extend it.
+Push notifications/reminders, caretaker missed-dose alerts, refill
+tracking, multi-language support, offline write queueing. The data model
+(`dose_logs.status`) already anticipates most of these — don't redesign
+it to add them, extend it.
+
+Dose history is partially built: each medication tracks a current dose
+plus taken history (`src/lib/doseHistory.js`), and cards surface "Last
+taken" + a "Yesterday" summary. Nothing older is discarded — it stays in
+`doseLogs` — but there's no UI yet to browse further back than
+yesterday; a full archive/history view is still deferred.

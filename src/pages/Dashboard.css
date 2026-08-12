@@ -14,7 +14,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: var(--space-4);
-  align-items: start;
+  /* stretch (grid's default) so every card in a row shares the row's
+     height — otherwise shorter cards leave uneven whitespace above the
+     next row instead of a consistent gap. */
 }
 
 /* Below this, auto-fit already produces 1-3 columns that stretch to

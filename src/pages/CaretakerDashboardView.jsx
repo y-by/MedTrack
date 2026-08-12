@@ -37,9 +37,15 @@ export default function CaretakerDashboardView({ caretakerId }) {
             <p className="caretaker-groups__empty">No active medications.</p>
           ) : (
             <ul className="card-list" aria-label={`${patient.displayName}'s medications`}>
-              {medications.map(({ medication, dose }) => (
+              {medications.map(({ medication, dose, lastTaken, yesterday }) => (
                 <li key={medication.id}>
-                  <MedicationCard medication={medication} dose={dose} patientName={patient.displayName} />
+                  <MedicationCard
+                    medication={medication}
+                    dose={dose}
+                    lastTaken={lastTaken}
+                    yesterday={yesterday}
+                    patientName={patient.displayName}
+                  />
                 </li>
               ))}
             </ul>

@@ -10,18 +10,38 @@
  */
 import { delay, nextId, users, links, medications, doseLogs, invites } from './mockData'
 import { computeNextDose } from './scheduleUtils'
+import { summarizeDoseHistory } from './doseHistory'
 
 // ---- Medications ----
 
-/** Returns [{ medication, dose }] for a patient, dose = the next relevant dose log. */
+/** Builds a fresh "current" dose log row for a medication from its schedule. */
+function buildDoseLog(medication) {
+  return {
+    id: nextId('dose'),
+    medicationId: medication.id,
+    ...computeNextDose(medication),
+    takenAt: null,
+  }
+}
+
+/**
+ * Returns [{ medication, dose, lastTaken, yesterday }] for a patient.
+ * `dose` is the current (not yet taken) dose log — the next actionable
+ * occurrence, drives the badge/"Mark as taken" as before. `lastTaken` is
+ * the most recently taken dose today (or null). `yesterday` is all of
+ * yesterday's taken doses. Older history isn't discarded — it just stays
+ * in doseLogs, unsurfaced here (see CLAUDE.md "Deferred to later phases").
+ */
 export async function getPatientMedications(patientId) {
   await delay()
   return medications
     .filter((m) => m.patientId === patientId && m.active)
-    .map((medication) => ({
-      medication,
-      dose: doseLogs.find((d) => d.medicationId === medication.id) || null,
-    }))
+    .map((medication) => {
+      const dose = doseLogs.find((d) => d.medicationId === medication.id && d.status !== 'taken') || null
+      const takenDoses = doseLogs.filter((d) => d.medicationId === medication.id && d.status === 'taken')
+      const { lastTaken, yesterday } = summarizeDoseHistory(takenDoses)
+      return { medication, dose, lastTaken, yesterday }
+    })
 }
 
 /** Creates a medication for a patient and an initial upcoming dose log. Returns { medication, dose }. */
@@ -58,12 +78,7 @@ export async function createMedication({
   }
   medications.push(medication)
 
-  const dose = {
-    id: nextId('dose'),
-    medicationId: medication.id,
-    ...computeNextDose(medication),
-    takenAt: null,
-  }
+  const dose = buildDoseLog(medication)
   doseLogs.push(dose)
 
   return { medication, dose }
@@ -71,9 +86,9 @@ export async function createMedication({
 
 /**
  * Updates an existing medication's editable fields in place, and
- * recomputes its dose's scheduledFor/status to match the (possibly new)
- * schedule — unless the dose is already marked taken, which an edit
- * shouldn't silently undo. Returns the updated medication.
+ * recomputes its current dose's scheduledFor/status to match the
+ * (possibly new) schedule — unless it's already been taken, which an
+ * edit shouldn't silently undo. Returns the updated medication.
  */
 export async function updateMedication(medicationId, updates) {
   await delay(150)
@@ -81,8 +96,8 @@ export async function updateMedication(medicationId, updates) {
   if (medication) {
     Object.assign(medication, updates)
 
-    const dose = doseLogs.find((d) => d.medicationId === medicationId)
-    if (dose && dose.status !== 'taken') {
+    const dose = doseLogs.find((d) => d.medicationId === medicationId && d.status !== 'taken')
+    if (dose) {
       Object.assign(dose, computeNextDose(medication))
     }
   }
@@ -97,7 +112,7 @@ export async function deleteMedication(medicationId) {
   return medication
 }
 
-/** Returns [{ patient, medications: [{medication, dose}] }] for everyone linked to a caretaker. */
+/** Returns [{ patient, medications: [{medication, dose, lastTaken, yesterday}] }] for everyone linked to a caretaker. */
 export async function getCaretakerOverview(caretakerId) {
   await delay()
   const patientIds = links
@@ -112,6 +127,12 @@ export async function getCaretakerOverview(caretakerId) {
   )
 }
 
+/**
+ * Marks a dose taken, then immediately generates the next occurrence as
+ * a new "current" dose log row (linked back via nextDoseId), so "Mark as
+ * taken" comes back once that next occurrence's time arrives instead of
+ * disappearing forever.
+ */
 export async function markDoseTaken(doseId) {
   await delay(150)
   const dose = doseLogs.find((d) => d.id === doseId)
@@ -119,18 +140,34 @@ export async function markDoseTaken(doseId) {
     dose.previousStatus = dose.status
     dose.status = 'taken'
     dose.takenAt = new Date().toISOString()
+
+    const medication = medications.find((m) => m.id === dose.medicationId)
+    if (medication) {
+      const nextDose = buildDoseLog(medication)
+      doseLogs.push(nextDose)
+      dose.nextDoseId = nextDose.id
+    }
   }
   return dose
 }
 
-/** Reverts a dose from 'taken' back to its status beforehand (undo). */
+/**
+ * Reverts a taken dose back to its status beforehand (undo), removing
+ * the "next" dose log row it generated so we don't leave an orphaned
+ * current dose behind.
+ */
 export async function markDoseNotTaken(doseId) {
   await delay(150)
   const dose = doseLogs.find((d) => d.id === doseId)
   if (dose) {
+    if (dose.nextDoseId) {
+      const generatedIndex = doseLogs.findIndex((d) => d.id === dose.nextDoseId)
+      if (generatedIndex !== -1) doseLogs.splice(generatedIndex, 1)
+    }
     dose.status = dose.previousStatus || 'upcoming'
     dose.previousStatus = undefined
     dose.takenAt = null
+    dose.nextDoseId = undefined
   }
   return dose
 }

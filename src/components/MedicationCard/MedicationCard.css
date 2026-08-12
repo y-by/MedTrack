@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  height: 100%;
 }
 
 .med-card__top {
@@ -76,13 +77,40 @@
   grid-column: 1 / -1;
 }
 
-.med-card__confirmed {
+.med-card__actions {
   display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  /* Pins the button + history block to the bottom of a stretched card
+     (see .card-list's align-items: stretch) as one unit, regardless of
+     which of them actually renders. */
+  margin-top: auto;
+}
+
+.med-card__history {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
-  margin: 0;
-  color: var(--color-status-taken);
-  font-weight: var(--weight-semibold);
+}
+
+.med-card__yesterday summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap-target-min);
+  padding: var(--space-1) var(--space-2);
+  margin: calc(var(--space-1) * -1) calc(var(--space-2) * -1);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+}
+
+.med-card__yesterday ul {
+  margin: var(--space-1) 0 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 
 @media (max-width: 380px) {

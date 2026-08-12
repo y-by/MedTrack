@@ -1,5 +1,6 @@
 import Card from '../ui/Card'
 import Button from '../ui/Button'
+import Badge from '../ui/Badge'
 import Icon from '../ui/Icon'
 import DoseStatusBadge from './DoseStatusBadge'
 import { formatTimeOfDay } from '../../lib/scheduleUtils'
@@ -23,28 +24,33 @@ function formatTime(iso) {
  * clarity beats density every time.
  *
  * @param {object} medication - { id, name, type, dosage, scheduleLabel, instructions }
- * @param {object} dose - { status, scheduledFor } — the next relevant dose
+ * @param {object} dose - { status, scheduledFor } — the current, not-yet-taken dose
+ * @param {object} [lastTaken] - { id, takenAt } — most recently taken dose today
+ * @param {object[]} [yesterday] - [{ id, takenAt }] — all of yesterday's taken doses
  * @param {string} [patientName] - shown in caretaker view to identify whose card this is
  * @param {(medicationId: string) => void} [onMarkTaken] - omit to render read-only (caretaker view)
  * @param {boolean} [isMarking] - shows loading state on the action button
- * @param {(medicationId: string) => void} [onUndoTaken] - omit to render read-only (caretaker view)
- * @param {boolean} [isUndoing]
+ * @param {(doseId: string) => void} [onUndoLastTaken] - omit to render read-only (caretaker view)
+ * @param {boolean} [isUndoingLastTaken]
  * @param {(medicationId: string) => void} [onEdit] - omit to render read-only (caretaker view)
  */
 export default function MedicationCard({
   medication,
   dose,
+  lastTaken,
+  yesterday,
   patientName,
   onMarkTaken,
   isMarking = false,
-  onUndoTaken,
-  isUndoing = false,
+  onUndoLastTaken,
+  isUndoingLastTaken = false,
   onEdit,
 }) {
   const { id, name, type, otherTypeLabel, dosage, scheduleLabel, instructions } = medication
   const typeLabel = type === 'other' && otherTypeLabel ? otherTypeLabel : TYPE_LABEL[type] || 'Medication'
   const nextTime = formatTime(dose?.scheduledFor)
   const headingId = `med-${id}-name`
+  const hasHistory = Boolean(lastTaken) || Boolean(yesterday?.length)
 
   return (
     <Card as="article" className="med-card" aria-labelledby={headingId}>
@@ -65,13 +71,7 @@ export default function MedicationCard({
               <Icon name="edit" size={18} />
             </Button>
           )}
-          {dose?.status && (
-            <DoseStatusBadge
-              status={dose.status}
-              onUndoTaken={onUndoTaken ? () => onUndoTaken(id) : undefined}
-              isUndoing={isUndoing}
-            />
-          )}
+          {dose?.status && <DoseStatusBadge status={dose.status} />}
         </div>
       </div>
 
@@ -94,26 +94,55 @@ export default function MedicationCard({
         )}
       </dl>
 
-      {onMarkTaken && dose?.status !== 'taken' && (
-        <Button
-          variant="primary"
-          size="lg"
-          fullWidth
-          loading={isMarking}
-          onClick={() => onMarkTaken(id)}
-          aria-describedby={headingId}
-        >
-          <Icon name="check" size={20} />
-          Mark as taken
-        </Button>
-      )}
+      <div className="med-card__actions">
+        {onMarkTaken && dose?.status !== 'taken' && (
+          <Button
+            variant="primary"
+            size="lg"
+            fullWidth
+            loading={isMarking}
+            onClick={() => onMarkTaken(id)}
+            aria-describedby={headingId}
+          >
+            <Icon name="check" size={20} />
+            Mark as taken
+          </Button>
+        )}
 
-      {dose?.status === 'taken' && (
-        <p className="med-card__confirmed">
-          <Icon name="checkCircle" size={18} />
-          Taken {dose.takenAt ? `at ${formatTime(dose.takenAt)}` : ''}
-        </p>
-      )}
+        {hasHistory && (
+          <div className="med-card__history">
+            {lastTaken && (
+              <Badge
+                as={onUndoLastTaken ? 'button' : 'span'}
+                type={onUndoLastTaken ? 'button' : undefined}
+                tone="taken"
+                icon={<Icon name="checkCircle" size={16} />}
+                className={onUndoLastTaken ? 'badge--interactive' : undefined}
+                onClick={onUndoLastTaken ? () => onUndoLastTaken(lastTaken.id) : undefined}
+                disabled={onUndoLastTaken ? isUndoingLastTaken : undefined}
+                aria-pressed={onUndoLastTaken ? 'true' : undefined}
+                aria-label={
+                  onUndoLastTaken ? `Taken at ${formatTime(lastTaken.takenAt)} — mark as not taken` : undefined
+                }
+              >
+                Last taken {formatTime(lastTaken.takenAt)}
+              </Badge>
+            )}
+            {yesterday?.length > 0 && (
+              <details className="med-card__yesterday">
+                <summary>
+                  Yesterday ({yesterday.length} {yesterday.length === 1 ? 'dose' : 'doses'})
+                </summary>
+                <ul>
+                  {yesterday.map((d) => (
+                    <li key={d.id}>{formatTime(d.takenAt)}</li>
+                  ))}
+                </ul>
+              </details>
+            )}
+          </div>
+        )}
+      </div>
     </Card>
   )
 }
